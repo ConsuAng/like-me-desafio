@@ -1,0 +1,19 @@
+{
+  "name": "like-me-desafio",
+  "version": "1.0.0",
+  "description": "desafio like-me",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ConsuAng/like-me-desafio.git"
+  },
+  "author": "Consuelo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ConsuAng/like-me-desafio/issues"
+  },
+  "homepage": "https://github.com/ConsuAng/like-me-desafio#readme"
+}
