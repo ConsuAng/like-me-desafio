@@ -13,6 +13,18 @@ const getAllPosts = async() => {
   return rows;
 };
 
+const getPost = async(id) => {
+  const consulta = "SELECT FROM posts WHERE id = $1";
+  const values = [id];
+  const result = await pool.query(consulta, values);
+  const [viaje] = result.rows;
+  if ( viaje.lenght === 0 ) {
+    throw { code: 404, message: `No se consiguió ningún viaje con el id ${id}` }
+  } else {
+    return viaje;
+  };
+}
+
 const createPost = async (titulo, img, descripcion) => {
   const consulta = "INSERT INTO posts values (DEFAULT, $1, $2, $3)";
   const values = [titulo, img, descripcion];
@@ -24,7 +36,7 @@ const addLike = async (id) => {
   const values = [id];
   const { rowCount } = await pool.query(consulta, values)
     if (rowCount === 0) {
-        throw { code: 404, message: `No se consiguió ningún viaje con este ${id}` }
+        throw { code: 404, message: `No se consiguió ningún viaje con el id ${id}` }
     }
 };
 
@@ -34,4 +46,4 @@ const deletePost = async(id) => {
   const result = await pool.query(consulta, values);
 };
 
-module.exports = { getAllPosts, createPost, addLike, deletePost };
+module.exports = { getAllPosts, createPost, addLike, deletePost, getPost };

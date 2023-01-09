@@ -2,10 +2,22 @@ const express =  require('express');
 const app = express();
 const PORT = 3000;
 
-const { getAllPosts, createPost, addLike, deletePost } = require('./services/posts');
+const { getAllPosts, createPost, addLike, deletePost, getPost } = require('./services/posts');
 
 app.use(express.json()) //middleware para parsear el cuerpo de la consulta
 app.use(express.static("public")); //middleware para servir archivos estáticos
+
+const verifyPost = async(req, res, next) => {
+  const { id }  = req.params;
+  try {
+    console.log('entro a try')
+    await getPost(id);
+    next();
+  } catch (error) {
+    console.log('entro a este error');
+    res.status(404).send(`No se encontro ningún post con el id ${id}`);
+  }
+};
 
 app.get("/", (req, res) => {
   try {
@@ -34,16 +46,24 @@ app.post("/posts", async (req, res) => {
   }
 });
 
-app.put('/posts/like/:id', async (req, res) => {
+app.put('/posts/like/:id', verifyPost, async (req, res) => {
   const { id } = req.params;
-  await addLike(id);
-  res.send('like added');
+  try {
+    await addLike(id);
+    res.send('like added');
+  } catch (error) {
+    res.send(error);
+  }
 });
 
-app.delete('/posts/:id', async (req, res) => {
+app.delete('/posts/:id', verifyPost, async (req, res) => {
   const { id } = req.params;
-  await deletePost(id);
-  res.send('post deleted');
+  try {
+    await deletePost(id);
+    res.send('post deleted');
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 app.listen(PORT, () => {
