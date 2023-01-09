@@ -2,7 +2,7 @@ const express =  require('express');
 const app = express();
 const PORT = 3000;
 
-const { getAllPosts, createPost } = require('./services/posts');
+const { getAllPosts, createPost, addLike, deletePost } = require('./services/posts');
 
 app.use(express.json()) //middleware para parsear el cuerpo de la consulta
 app.use(express.static("public")); //middleware para servir archivos estáticos
@@ -32,6 +32,18 @@ app.post("/posts", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+app.put('/posts/like/:id', async (req, res) => {
+  const { id } = req.params;
+  await addLike(id);
+  res.send('like added');
+});
+
+app.delete('/posts/:id', async (req, res) => {
+  const { id } = req.params;
+  await deletePost(id);
+  res.send('post deleted');
 });
 
 app.listen(PORT, () => {
